@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Informatics: Windows Essentials Quiz</title>
+    <style>
+        /* Base Setup & Typography */
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px 0;
+            background-color: #f4f6f9; /* Light, neutral background */
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header */
+        h1 {
+            text-align: center;
+            color: #007bff; /* Primary Blue */
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e9ecef;
+            font-weight: 600;
+        }
+        
+        /* Question Block Styling */
+        .question {
+            margin-bottom: 30px;
+            padding: 15px 20px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            transition: box-shadow 0.3s;
+        }
+        .question:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .question p strong {
+            display: block;
+            font-size: 1.15em;
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        /* Options List & Labels */
+        .options {
+            padding-left: 0;
+            list-style: none;
+        }
+        .options li {
+            margin-bottom: 8px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+        .options label:hover {
+            background-color: #f0f8ff;
+            border-color: #007bff;
+        }
+
+        /* Custom Radio Button Styling */
+        input[type="radio"] {
+            /* Hide default radio button and use custom indicator */
+            display: none;
+        }
+        
+        /* Custom radio button appearance */
+        .options label::before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            border: 2px solid #007bff;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        
+        input[type="radio"]:checked + span::before {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        /* Feedback Styles */
+        .correct-answer {
+            background-color: #d4edda !important; /* Light Green */
+            border-color: #28a745 !important; /* Dark Green */
+            color: #155724;
+            font-weight: 500;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important; /* Light Red */
+            border-color: #dc3545 !important; /* Dark Red */
+            color: #721c24;
+            font-weight: 500;
+        }
+        
+        /* Correct/Wrong check mark in custom radio button */
+        .correct-answer::before {
+             border-color: #28a745 !important;
+             background-color: #28a745 !important;
+             content: '✓' !important;
+             color: white;
+             text-align: center;
+             line-height: 18px;
+             font-size: 12px;
+             font-weight: bold;
+        }
+        .wrong-answer::before {
+            border-color: #dc3545 !important;
+            background-color: #dc3545 !important;
+            content: '×' !important;
+            color: white;
+            text-align: center;
+            line-height: 18px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Submit Button */
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745; /* Green for submission */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        button:hover {
+            background-color: #1e7e34;
+        }
+        button:active {
+            transform: scale(0.99);
+        }
+
+        /* Results Display */
+        #results {
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f7f7f7;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.4em;
+            display: none;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        #results strong {
+            color: #dc3545;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💻 Health Informatics: Windows Essentials Quiz</h1>
+    <form id="quizForm">
+        </form>
+    <button onclick="submitQuiz()">Show Final Score</button>
+    <div id="results"></div>
+</div>
+
+<script>
+    const quizQuestions = [
+        {
+            question: "1. What is the main purpose of the Start Menu in the Windows operating system?",
+            options: { A: "To display running applications on the screen.", B: "To provide a temporary storage area for deleted files.", C: "To access programs, settings, and files.", D: "To organize files and folders on the computer." },
+            answer: "C"
+        },
+        {
+            question: "2. Which Windows component is described as the main workspace where you interact with applications?",
+            options: { A: "The Taskbar", B: "The File Explorer", C: "The Control Panel", D: "The Desktop" },
+            answer: "D"
+        },
+        {
+            question: "3. What is the primary tool used in Windows to manage files and folders?",
+            options: { A: "Control Panel", B: "Start Menu", C: "File Explorer", D: "Recycle Bin" },
+            answer: "C"
+        },
+        {
+            question: "4. According to the best practices for organizing files, what characteristic should folder names have?",
+            options: { A: "They should be short and use abbreviations.", B: "They should be descriptive.", C: "They should be named by the date of creation.", D: "They should all be numeric." },
+            answer: "B"
+        },
+        {
+            question: "5. Which of the following is *not* listed as a key component of the Windows graphical user interface (GUI) in the content?",
+            options: { A: "The Taskbar", B: "The Control Panel", C: "The Start Menu", D: "The Registry Editor" },
+            answer: "D"
+        },
+        {
+            question: "6. The Taskbar is typically located where on the screen?",
+            options: { A: "The top left corner.", B: "The center of the screen.", C: "The right side of the screen.", D: "The bottom of the screen." },
+            answer: "D"
+        },
+        {
+            question: "7. In File Explorer, how can a user quickly move a file from one folder to another?",
+            options: { A: "By right-clicking the file and selecting \"Copy,\" then pasting it.", B: "By using the \"Rename\" function.", C: "By dragging and dropping the file to the new folder.", D: "By selecting the file and pressing the F2 key." },
+            answer: "C"
+        },
+        {
+            question: "8. Which option is used to customize the look and feel of Windows, such as changing the wallpaper or themes?",
+            options: { A: "System and Security", B: "Network and Internet", C: "Appearance and Personalization", D: "Hardware and Sound" },
+            answer: "C"
+        },
+        {
+            question: "9. What is the function of the Recycle Bin on the Desktop?",
+            options: { A: "To store frequently used applications.", B: "To provide quick access to common tools.", C: "A temporary storage area for deleted files.", D: "The main workspace for applications." },
+            answer: "C"
+        },
+        {
+            question: "10. What is a recommended first troubleshooting tip for common Windows issues like slow performance?",
+            options: { A: "Clearing browser cache and cookies.", B: "Running antivirus scans.", C: "Checking for updates.", D: "Restarting your computer." },
+            answer: "D"
+        },
+        {
+            question: "11. Which option in the Start Menu allows you to quickly locate a specific program, file, or setting without manually navigating through lists?",
+            options: { A: "Most used apps", B: "All apps", C: "Power options", D: "Search bar" },
+            answer: "D"
+        },
+        {
+            question: "12. When you right-click within a desired folder in File Explorer to create a new one, which menu option do you select before choosing \"Folder\" or \"Text Document\"?",
+            options: { A: "View", B: "New", C: "Properties", D: "Organize" },
+            answer: "B"
+        },
+        {
+            question: "13. Which category within the Control Panel is specifically for managing hardware, software, and certain security settings?",
+            options: { A: "Network and Internet", B: "Appearance and Personalization", C: "System and Security", D: "Hardware and Sound" },
+            answer: "C"
+        },
+        {
+            question: "14. What specific type of computer interface does Windows primarily provide for user interaction?",
+            options: { A: "Command Line Interface (CLI)", B: "Text-Based Interface (TBI)", C: "Graphical User Interface (GUI)", D: "Natural Language Interface (NLI)" },
+            answer: "C"
+        },
+        {
+            question: "15. If you want to change administrator privileges for a user, which overarching action are you performing according to the lecture material?",
+            options: { A: "Personalizing your Desktop", B: "Organizing Files with Folders", C: "Troubleshooting Common Windows Issues", D: "Managing User Accounts" },
+            answer: "D"
+        },
+        {
+            question: "16. The Taskbar allows for **quick access** to common tools and what other key function related to open software?",
+            options: { A: "Installing new applications.", B: "Switching between open applications.", C: "Running antivirus scans.", D: "Changing the screen resolution." },
+            answer: "B"
+        },
+        {
+            question: "17. Which of the following is *not* listed as an option for personalizing your Desktop?",
+            options: { A: "Adjust screen resolution.", B: "Customize colors and themes.", C: "Run antivirus scans.", D: "Change wallpaper." },
+            answer: "C"
+        },
+        {
+            question: "18. In the context of the Control Panel categories, which one would you most likely use to configure your Wi-Fi or Ethernet settings?",
+            options: { A: "System and Security", B: "Network and Internet", C: "Hardware and Sound", D: "Appearance and Personalization" },
+            answer: "B"
+        },
+        {
+            question: "19. What are *Icons* on the Desktop fundamentally considered shortcuts to?",
+            options: { A: "Only files and folders.", B: "Files, folders, and applications.", C: "Only system settings.", D: "Only the Recycle Bin." },
+            answer: "B"
+        },
+        {
+            question: "20. In addition to moving and deleting files, what other functions does File Explorer perform regarding file organization?",
+            options: { A: "Only creating new user accounts.", B: "Navigating through folders/files and organizing files into folders.", C: "Adjusting screen resolution and changing wallpaper.", D: "Clearing browser cache and cookies." },
+            answer: "B"
+        }
+    ];
+
+    const quizForm = document.getElementById('quizForm');
+    const resultsDiv = document.getElementById('results');
+
+    // Function to handle immediate feedback on selection
+    function checkAnswer(questionIndex, selectedInput) {
+        const questionData = quizQuestions[questionIndex];
+        const optionsList = document.querySelector(`#q${questionIndex} .options`);
+        const labels = optionsList.querySelectorAll('label');
+        
+        // 1. Disable all radio buttons for this question after the first click
+        labels.forEach(label => {
+            label.style.pointerEvents = 'none';
+            label.querySelector('input[type="radio"]').disabled = true;
+        });
+
+        // 2. Apply feedback classes to all labels
+        labels.forEach(label => {
+            const input = label.querySelector('input[type="radio"]');
+            
+            // Check if this option is the correct answer
+            if (input.value === questionData.answer) {
+                label.classList.add('correct-answer');
+            } 
+            // Check if this option was the wrong one selected by the user
+            else if (input === selectedInput) {
+                label.classList.add('wrong-answer');
+            }
+        });
+    }
+
+    // Function to render the quiz structure
+    function renderQuiz() {
+        quizQuestions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            questionDiv.id = `q${index}`;
+            questionDiv.innerHTML = `<p><strong>${q.question}</strong></p>`;
+            
+            const optionsList = document.createElement('ul');
+            optionsList.className = 'options';
+            
+            for (const key in q.options) {
+                const optionId = `q${index}_${key}`;
+                const listItem = document.createElement('li');
+                const label = document.createElement('label');
+                
+                // Wrap option text in a span to better control the custom radio button
+                label.innerHTML = `
+                    <input type="radio" name="question${index}" value="${key}" id="${optionId}">
+                    <span class="option-text">${key}) ${q.options[key]}</span>
+                `;
+
+                // Add event listener to the label for feedback
+                label.addEventListener('click', (event) => {
+                    // Check if a radio button was actually clicked
+                    const inputElement = label.querySelector('input[type="radio"]');
+                    if (!inputElement.disabled) {
+                       checkAnswer(index, inputElement);
+                    }
+                });
+
+                listItem.appendChild(label);
+                optionsList.appendChild(listItem);
+            }
+            
+            questionDiv.appendChild(optionsList);
+            quizForm.appendChild(questionDiv);
+        });
+    }
+
+    // Function to calculate and show the final score
+    function submitQuiz() {
+        let score = 0;
+        const totalQuestions = quizQuestions.length;
+
+        // Ensure immediate feedback is shown for any unanswered questions upon final score submission
+        quizQuestions.forEach((q, index) => {
+            const selector = `input[name="question${index}"]:checked`;
+            const selectedOption = document.querySelector(selector);
+            
+            // If the question hasn't been answered, or if it was answered but we need to ensure the correct one is highlighted
+            if (!selectedOption || !document.querySelector(`#q${index} label.correct-answer`)) {
+                // Manually trigger the feedback check to highlight the correct answer
+                const questionElement = document.getElementById(`q${index}`);
+                const labels = questionElement.querySelectorAll('label');
+
+                labels.forEach(label => {
+                    const input = label.querySelector('input[type="radio"]');
+                    label.style.pointerEvents = 'none';
+                    input.disabled = true;
+                    if (input.value === q.answer) {
+                        label.classList.add('correct-answer');
+                    }
+                });
+            }
+
+            // Calculate the score
+            if (selectedOption && selectedOption.value === q.answer) {
+                score++;
+            }
+        });
+        
+        // Display Results
+        resultsDiv.innerHTML = `
+            <h2>Final Score</h2>
+            <p>You scored <strong>${score}</strong> out of <strong>${totalQuestions}</strong>.</p>
+            <p style="color: ${score >= totalQuestions * 0.8 ? '#28a745' : '#dc3545'}; font-size: 1.1em; margin-top: 15px;">
+                ${score >= totalQuestions * 0.8 ? '🎉 Excellent work! Knowledge mastered.' : 'Keep reviewing the material for a perfect score!'}
+            </p>
+        `;
+        resultsDiv.style.display = 'block';
+        window.scrollTo(0, document.body.scrollHeight); // Scroll to results
+    }
+
+    // Initialize the quiz when the page loads
+    window.onload = renderQuiz;
+</script>
+
+</body>
+</html>
